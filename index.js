@@ -1,7 +1,13 @@
-/*
-play this: https://www.youtube.com/watch?v=d-diB65scQU
+const server = require('./api/server');
 
-Sing along:
+const port = 9000;
+
+server.listen(port, () => {
+    console.log('server running on port', port)
+});
+
+/*
+Read along:
 
 here's a little code I wrote, please read the README word for word, don't worry, you got this
 in every task there may be trouble, but if you worry you make it double, don't worry, you got this
@@ -12,3 +18,5 @@ I need this code, but don't know where, perhaps should make some middleware, don
 
 Pull your server into this file and start it!
 */
+
+
