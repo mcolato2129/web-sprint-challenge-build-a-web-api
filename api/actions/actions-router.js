@@ -1,7 +1,8 @@
 const express = require('express');
 const Actions = require('./actions-model')
 const {
-    validateActionsId
+    validateActionsId,
+    validateActions,
 } = require('./actions-middlware')
 
 const router = express.Router();
@@ -21,16 +22,16 @@ router.get('/api/actions/:id', validateActionsId, (req, res, next) => {
     res.json(req.action);
 })
 
-router.post('/api/actions', validateActionsId, (req, res, next) => {
-    Projects.insert({ notes: req.notes, description: req.description, project_id: req.params.id })
-        .then(newProject => {
-            res.status(201).json(newProject)
+router.post('/api/actions', validateActions, (req, res, next) => {
+    Actions.insert({ notes: req.notes, description: req.description })
+        .then(newAction => {
+            res.status(201).json(newAction);
         }).catch(next);
 })
 
 router.use((err, req, res, next) => {
     res.status(err.status || 500).json({
-        customMessage: "Barrrd Aim inside projects router happened",
+        customMessage: "Barrrd Aim inside actions router happened",
         message: err.message,
         stack: err.stack
     })
