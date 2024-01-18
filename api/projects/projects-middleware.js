@@ -25,5 +25,6 @@ function logger(req, res, next) {
 
 
   module.exports = {
-    logger
+    logger,
+    validateProjectId,
   }
