@@ -31,7 +31,7 @@ router.post('/api/actions', validateActions, (req, res, next) => {
 
 router.use((err, req, res, next) => {
     res.status(err.status || 500).json({
-        customMessage: "Barrrd Aim inside actions router happened",
+        customMessage: "projects inside actions router happened",
         message: err.message,
         stack: err.stack
     })

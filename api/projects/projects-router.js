@@ -45,6 +45,18 @@ router.put('/api/projects/:id', validateProjectId, validateProject, (req, res, n
         })
 })
 
+router.delete('/api/projects/:id', validateProjectId, (req, res, next) => {
+    Projects.remove(req.params.id)
+      .then(() => {
+        return Projects.get(req.params.id)
+          .then(() => {
+            res.json(req.project)
+          })
+      })
+      .catch(next)
+  });
+
+
 router.get('/api/projects/:id/action', validateProjectId, async (req, res, next )=> {
     try {
         const result = await Projects.getProjectActions(req.params.id);
@@ -56,7 +68,7 @@ router.get('/api/projects/:id/action', validateProjectId, async (req, res, next 
 
 router.use((err, req, res, next) => {
     res.status(err.status || 500).json({
-        customMessage: "Barrrd Aim inside projects router happened",
+        customMessage: "problems inside projects router happened",
         message: err.message,
         stack: err.stack
     })
