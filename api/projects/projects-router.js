@@ -31,7 +31,6 @@ router.post('/api/projects', validateProject, (req, res, next) => {
 })
 
 router.put('/api/projects/:id', validateProjectId, validateProject, (req, res, next) => {
-    const { completed } = req.body;
     Projects.update(req.params.id, { name: req.name, description: req.description})
         .then(() => {
             return Projects.get(req.params.id)
@@ -44,6 +43,15 @@ router.put('/api/projects/:id', validateProjectId, validateProject, (req, res, n
                 })
                 .catch(next)
         })
+})
+
+router.get('/api/projects/:id/action', validateProjectId, async (req, res, next )=> {
+    try {
+        const result = await Projects.getProjectActions(req.params.id);
+        res.json(result);
+      } catch (err) {
+        next(err);
+      }
 })
 
 router.use((err, req, res, next) => {
