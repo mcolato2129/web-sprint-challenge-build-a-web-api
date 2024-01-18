@@ -24,10 +24,26 @@ router.get('/api/projects/:id', validateProjectId, (req, res, next) => {
 })
 
 router.post('/api/projects', validateProject, (req, res, next) => {
-    Projects.insert({name: req.name, description: req.description})
-    .then(newProject => {
-        res.status(201).json(newProject)
-    }).catch(next);
+    Projects.insert({ name: req.name, description: req.description })
+        .then(newProject => {
+            res.status(201).json(newProject)
+        }).catch(next);
+})
+
+router.put('/api/projects/:id', validateProjectId, validateProject, (req, res, next) => {
+    const { completed } = req.body;
+    Projects.update(req.params.id, { name: req.name, description: req.description})
+        .then(() => {
+            return Projects.get(req.params.id)
+                .then(updatedProject => {
+                    if (!updatedProject) {
+                        res.status(400).json({ message: 'the request body is missing name, description or completed' })
+                    } else {
+                        res.json(updatedProject)
+                    }
+                })
+                .catch(next)
+        })
 })
 
 router.use((err, req, res, next) => {
