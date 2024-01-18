@@ -24,8 +24,8 @@ async function validateProjectId(req, res, next) {
 }
 
 function validateProject(req, res, next) {
-    const { name, description } = req.body;
-    if (!name || !name.trim() || !description || !description) {
+    const { name, description, completed } = req.body;
+    if (!name || !name.trim() || !description || !description.trim() || typeof completed !== 'boolean' ) {
         res.status(400).json({ message: 'the request body is missing name or description' })
     } else {
         req.name = name;

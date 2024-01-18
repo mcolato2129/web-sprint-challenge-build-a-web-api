@@ -23,7 +23,7 @@ router.get('/api/actions/:id', validateActionsId, (req, res, next) => {
 })
 
 router.post('/api/actions', validateActions, (req, res, next) => {
-    Actions.insert({ notes: req.notes, description: req.description })
+    Actions.insert(req.body)
         .then(newAction => {
             res.status(201).json(newAction);
         }).catch(next);

@@ -24,14 +24,14 @@ router.get('/api/projects/:id', validateProjectId, (req, res, next) => {
 })
 
 router.post('/api/projects', validateProject, (req, res, next) => {
-    Projects.insert({ name: req.name, description: req.description })
+    Projects.insert(req.body)
         .then(newProject => {
             res.status(201).json(newProject)
         }).catch(next);
 })
 
 router.put('/api/projects/:id', validateProjectId, validateProject, (req, res, next) => {
-    Projects.update(req.params.id, { name: req.name, description: req.description})
+    Projects.update(req.params.id, req.body)
         .then(() => {
             return Projects.get(req.params.id)
                 .then(updatedProject => {
