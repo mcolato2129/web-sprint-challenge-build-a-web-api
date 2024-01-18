@@ -1,7 +1,10 @@
 const express = require('express');
+const { logger } = require('./projects/projects-middleware')
+
 const server = express();
 
 server.use(express.json())
+server.use(logger);
 
 server.get('/', (req, res) => {
     res.send('Barrd Aim');
