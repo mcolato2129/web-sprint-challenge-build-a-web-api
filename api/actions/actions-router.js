@@ -43,6 +43,17 @@ router.put('/api/actions/:id', validateProjectId, validateActions, (req, res, ne
         })
 })
 
+router.delete('/api/actions/:id', validateActionsId, (req, res, next) => {
+    Actions.remove(req.params.id)
+        .then(() => {
+            return Actions.get(req.params.id)
+                .then(() => {
+                    res.json(req.action)
+                })
+        })
+        .catch(next)
+});
+
 router.use((err, req, res, next) => {
     res.status(err.status || 500).json({
         customMessage: "projects inside actions router happened",
