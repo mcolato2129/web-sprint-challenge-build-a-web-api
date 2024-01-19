@@ -54,22 +54,38 @@ router.delete('/api/projects/:id', validateProjectId, (req, res, next) => {
 });
 
 
-router.get('/api/projects/:id/actions', validateProjectId, async (req, res, next) => {
-    try {
-         await Projects.getProjectActions(req.body)
-        .then(() => {
-            return Actions.get(req.body.action)
-            .then(actions => {
-                res.json(actions)
-            });
-        }).catch(next);
-        // const projectActions =
-        // res.json(projectActions);
+// router.get('/api/projects/:id/actions', validateProjectId, async (req, res, next) => {
+//     try {
+//         await Projects.getProjectActions(req.params.id)
+//             .then(() => {
+//                 if (!req.body.actions) {
+//                     return res.json([]);
+//                 }
+//                 return Actions.get(req.params.id)
+//                     .then(actions => {
+//                         res.json(actions);
+//                     })
+//                     .catch(next);
 
-    } catch (err) {
-        next(err);
-    }
-})
+//             });
+//     } catch (err) {
+//         next(err);
+//     }
+// });
+
+
+router.get('/api/projects/:id/actions', validateProjectId, (req, res, next) => {
+    Projects.getProjectActions(req.params.id)
+      .then(actions => {
+        res.status(200).json(actions);
+      })
+      .catch(error => {
+        next({
+          message: 'We ran into an error retrieving the project actions',
+        });
+      });
+  });
+
 
 router.use((err, req, res, next) => {
     res.status(err.status || 500).json({
