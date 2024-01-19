@@ -1,10 +1,7 @@
 const express = require('express');
 const Projects = require('./projects-model');
-const {
-    validateProjectId,
-    validateProject,
-
-} = require('./projects-middleware');
+const Actions = require('../actions/actions-model')
+const { validateProjectId, validateProject } = require('./projects-middleware');
 
 const router = express.Router();
 
@@ -47,23 +44,31 @@ router.put('/api/projects/:id', validateProjectId, validateProject, (req, res, n
 
 router.delete('/api/projects/:id', validateProjectId, (req, res, next) => {
     Projects.remove(req.params.id)
-      .then(() => {
-        return Projects.get(req.params.id)
-          .then(() => {
-            res.json(req.project)
-          })
-      })
-      .catch(next)
-  });
+        .then(() => {
+            return Projects.get(req.params.id)
+                .then(() => {
+                    res.json(req.project)
+                })
+        })
+        .catch(next)
+});
 
 
-router.get('/api/projects/:id/action', validateProjectId, async (req, res, next )=> {
+router.get('/api/projects/:id/actions', validateProjectId, async (req, res, next) => {
     try {
-        const result = await Projects.getProjectActions(req.params.id);
-        res.json(result);
-      } catch (err) {
+         await Projects.getProjectActions(req.body)
+        .then(() => {
+            return Actions.get(req.body.action)
+            .then(actions => {
+                res.json(actions)
+            });
+        }).catch(next);
+        // const projectActions =
+        // res.json(projectActions);
+
+    } catch (err) {
         next(err);
-      }
+    }
 })
 
 router.use((err, req, res, next) => {
